@@ -94,6 +94,7 @@
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion() {
@@ -170,16 +171,30 @@
           // determine option value, e.g. optionId = 'olives', option = { label: 'Olives', price: 2, default: true }
           const option = param.options[optionId];
           console.log('option', optionId, option);
-          // check if there is param with a name of paramId in formData and if it includes optionId
-          if(formData[paramId] && formData[paramId].includes(optionId)) {
+          // find image 
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          // set const to check if there is param with a name of paramId in formData and if it includes optionId
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
+          
+ 
+          if(optionImage){
+            if(optionSelected){
+              // add image 
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+
+            }else{
+              // remove image 
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
+          if(optionSelected){
             // check if the option is not default
-            if(option.default !== true) {
-              // add option price to price variable
+            if(option.default !== true){
+            // add option price to price variable
               price += option.price;
             }
-          } else {
-            // check if the option is default
-            if(option.default == true) {
+          }else{ 
+            if(option.default == true){
               // reduce price variable
               price -= option.price;
             }
@@ -190,7 +205,6 @@
       thisProduct.priceElem.innerHTML = price;
     }
   }
-
   const app = {
     initMenu: function(){
       const thisApp = this;
@@ -219,6 +233,5 @@
       thisApp.initMenu();
     },
   };
-
   app.init();
 }
