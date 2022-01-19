@@ -306,7 +306,7 @@
           
           if(optionSelected){
             // option is selected!
-            params[paramId].options[optionId] = option;
+            params[paramId].options[optionId] = option.label;
           }
         }
       }
@@ -410,7 +410,7 @@
       const thisCart = this;
 
       /* generate HTML based on template */
-      const generatedHTML = templates.menuProduct(menuProduct);
+      const generatedHTML = templates.cartProduct(menuProduct);
 
       /* create element using utils.createElementFromHTML */
       const generatedDOM = utils.createDOMFromHTML(generatedHTML);
