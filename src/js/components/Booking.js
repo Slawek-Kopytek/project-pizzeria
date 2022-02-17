@@ -46,10 +46,8 @@ class Booking{
     thisBooking.dom.hoursAmount.addEventListener('click', function(){});
   
     thisBooking.date = new DatePicker(thisBooking.dom.datePicker);
-    thisBooking.dom.datePicker.addEventListener('click', function(){});
 
     thisBooking.date = new HourPicker(thisBooking.dom.hourPicker);
-    thisBooking.dom.hourPicker.addEventListener('click', function(){});
   }
 }
 
