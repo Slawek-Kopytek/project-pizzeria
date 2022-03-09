@@ -8,7 +8,7 @@ class Booking{
   constructor(element){
     const thisBooking = this;
 
-    thisBooking.tableSelected = [];
+    thisBooking.tableSelected = null;
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
@@ -194,7 +194,8 @@ class Booking{
     });
 
     thisBooking.dom.floorPlan.addEventListener('click', function(event){
-      thisBooking.initTables(event);
+      //thisBooking.initTables(event);
+      thisBooking.handlefloorPlan(event);
     });
 
     thisBooking.dom.form.addEventListener('submit', function (event) {
@@ -203,28 +204,37 @@ class Booking{
     });
   }
 
-  initTables(event){
+  handlefloorPlan(event){
     event.preventDefault();
 
     const thisBooking = this;
     const element = event.target;
+    const isTable = element.classList.contains(classNames.booking.table);
+    const isBooked = element.classList.contains(classNames.booking.tableBooked);
 
-    const table = element.classList.contains(classNames.booking.table);
-    const booked = element.classList.contains(classNames.booking.tableBooked);
-    const selected = element.classList.contains(classNames.booking.tableSelected);
-
-    if(table && !booked){
-      thisBooking.removeTableSelected();
-      if(!selected){
-        element.classList.toggle(classNames.booking.tableSelected);
-        thisBooking.tableSelected = parseInt(
-          element.getAttribute('data-table')
-        );
-        if(booked){
-          alert('Table is booked!');
-        }
-      }
+    if (!isTable) {
+      return;
     }
+
+    if (isBooked) {
+      alert('Table is booked!');
+      return;
+    }
+
+    const isSelected = element.classList.contains(classNames.booking.tableSelected);
+
+
+    //
+    if(!isSelected){
+      element.classList.toggle(classNames.booking.tableSelected);
+      thisBooking.tableSelected = parseInt(
+        element.getAttribute('data-table')
+      );
+
+    } else {
+      thisBooking.removeTableSelected();
+    }
+
   }
 
   removeTableSelected(){
@@ -233,16 +243,22 @@ class Booking{
     for(const table of thisBooking.dom.tables){
       table.classList.remove(classNames.booking.tableSelected);
     }
-    thisBooking.tableSelected = [];
+
+    thisBooking.tableSelected = null;
   }
 
   sendBooking(){
     const thisBooking = this;
+
+    if (!thisBooking.tableSelected) {
+      return;
+    }
+
     const url = settings.db.url + '/' + settings.db.bookings;
 
     let payload = {};
     payload.date = thisBooking.datePicker.value;
-    payload.hour = thisBooking.datePicker.value;
+    payload.hour = thisBooking.hourPicker.value;
     payload.table = thisBooking.tableSelected;
     payload.duration = thisBooking.hoursAmount.value;
     payload.ppl = thisBooking.peopleAmount.value;
@@ -270,8 +286,13 @@ class Booking{
           payload.duration,
           payload.table
         );
+
+        thisBooking.removeTableSelected();
+        thisBooking.updateDOM();
+        alert('Table is booked sucessfull!!');
+        console.log('thisBoking.booked', thisBooking.booked);
       });
-    console.log('thisBoking.booked', thisBooking.booked);
+
   }
 }
 
