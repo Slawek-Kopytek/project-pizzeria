@@ -153,6 +153,12 @@
       }
   
     }
+
+    &.selected{
+      background: #fc5c65;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
   
     &.booked {
       cursor: not-allowed;
