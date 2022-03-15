@@ -155,9 +155,8 @@
     }
 
     &.selected{
-      background: #fc5c65;
+      background: $color-success;
       opacity: 0.5;
-      cursor: not-allowed;
     }
   
     &.booked {
